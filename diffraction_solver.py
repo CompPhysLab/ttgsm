@@ -200,14 +200,30 @@ def plane_wave_in_layers(simulation_variables):
     return amps
 
 
-def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
+def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6, verb=False):
+    if verb:
+    	print('initializing diffraction solver...')
     simulation_variables = SimulationVariables(do, dl, grating, incidence, accuracy=accuracy)
-
+    
+    if verb:
+    	print('calculating r...')
     r = calculate_r(simulation_variables)
+    if verb:
+    	print('calculating p...')
     p = calculate_p(simulation_variables)
+    if verb:
+    	print('calculating v...')
     v = calculate_v(simulation_variables)
+    if verb:
+    	print('calculating q...')
     q = calculate_q(simulation_variables)
+    if verb:
+    	print('calculating t...')
     t = calculate_t(simulation_variables)
+    
+    if verb:
+    	print('calculated all matrices successfully')
+    	print('multiplying matrices...')
 
     diffraction_matrix = p
     for matrix in [v, q]:
@@ -219,14 +235,26 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
     identity = tt.eye(2, do + dl + 1)
     a = identity - a
     # memory_to_print = len(a.tt.core)
+    
+    if verb:
+    	print('multiplied')
+    	print('solving linear system with plane wave...')
 
     external = plane_wave_in_layers(simulation_variables)
     modes_in_layers = amen_solve(a, external, tt.ones(2, do + dl + 1), accuracy, verb=0)
+    
+    if verb:
+    	print('solved')
+    	print('multiplying matrices...')
 
     # propagate to substrate and superstrate
     a = t * diffraction_matrix
     a = a.round(accuracy)
     modes = tt.matvec(a, modes_in_layers)
+    
+    if verb:
+    	print('multiplied')
+    	print('transforming cores...')
 
     # as matrix T was rectangular, modes have (do + dl) dimensions
     # but n(do+1, ..., dl) = 1
@@ -247,5 +275,8 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
         tt.vector.from_list([np.array([[[1], [0]]], dtype=complex)]),
         do, 2 ** (do - 1))
     modes += external_one_layer * np.exp(1j * k_zn(grating, incidence, 0) * grating.thickness)
-
+    
+    if verb:
+    	print('end')
+  
     return modes
