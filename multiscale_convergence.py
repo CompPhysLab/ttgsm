@@ -11,11 +11,14 @@ if __name__ == '__main__':
 
     print('Input d')
     d = int(input())
+    
+    print('Input accuracy (number of digits)')
+    accuracy = 10 ** -int(input())
 
     incidence = Incidence(angle=10)
     grating = Grating.multiscale_lamellar_random(period=n * smaller_scale, n=n,
                                                  thickness=0.5, max_permittivity=2.1, seed=1)
 
-    x = solve_diffraction(d, d, grating, incidence, accuracy=1e-6, verb=True)
+    x = solve_diffraction(d, d, grating, incidence, accuracy=accuracy)
     amp = abs(x.full(asvector=True)[2 ** (d - 1)])
     print(n, d, amp)
