@@ -1,6 +1,6 @@
 import numpy as np
 import tt
-from tt.amen import amen_solve
+from tt.amen import amen_solve, amen_mv
 
 from tt_utils import tt_tile, map_on_modes, qtt_exp, block_diagonal, insert_zeros
 
@@ -227,8 +227,9 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
     # propagate to substrate and superstrate
     a = t * diffraction_matrix
     a = a.round(accuracy)
-    modes = tt.matvec(a, modes_in_layers)
-    modes = modes.round(accuracy)
+    # modes = tt.matvec(a, modes_in_layers)
+    modes = amen_mv(a, modes_in_layers, accuracy, verb=False)[0]
+    # modes = modes.round(accuracy)
 
     # as matrix T was rectangular, modes have (do + dl) dimensions
     # but n(do+1, ..., dl) = 1
