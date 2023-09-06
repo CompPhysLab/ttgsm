@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     incidence = Incidence(angle=10)
     grating = Grating.multiscale_lamellar_random(period=n * smaller_scale, n=n,
-                                                 thickness=0.5, max_permittivity=2.1, seed=1)
+                                                 thickness=0.25, max_permittivity=2.1, seed=1)
 
     x = solve_diffraction(d, d, grating, incidence, accuracy=accuracy)
     amp = abs(x.full(asvector=True)[2 ** (d - 1)])
