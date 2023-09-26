@@ -9,7 +9,7 @@ logging.basicConfig(filename='multiscale.log', filemode='w', format='%(message)s
 try:
     smaller_scale = 6.3
     n_range = [100]
-    d_range = range(2, 4)
+    d_range = range(2, 17)
 
     for d in d_range:
         for n in n_range:
