@@ -1,8 +1,8 @@
 import subprocess
 
 
-print('Enter script name to run:')
-scriptname = input()
+if __name__ == '__main__':
+    print('Enter script name to run:')
+    script_name = input()
 
-subprocess.Popen(['python3', f'{scriptname}.py'])
-
+    subprocess.Popen(['python3', f'{script_name}.py'])
