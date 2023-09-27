@@ -21,13 +21,16 @@ try:
     print('thickness:', end='\t')
     thickness = float(input())
 
+    print('accuracy:', end='\t')
+    accuracy = float(input())
+
     for d in d_range:
         for n in n_range:
 
             incidence = Incidence(angle=10)
             grating = Grating.multiscale_lamellar_random(period=n * smaller_scale, n=n,
                                                          thickness=thickness, max_permittivity=2.1, seed=1)
-            x = solve_diffraction(d, d, grating, incidence, accuracy=1e-5)
+            x = solve_diffraction(d, d, grating, incidence, accuracy=accuracy)
             amp = abs(x.full(asvector=True)[2 ** (d - 1)])
             # print(n, d, amp)
             logging.warning(f'{n} {d} {amp}')
