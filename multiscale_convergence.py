@@ -23,9 +23,10 @@ try:
         n_range = list(map(int, sys.argv[1].split(',')))
         d_from = int(sys.argv[2])
         d_to = int(sys.argv[3])
-        d_range = range(d_from, d_to)
         thickness = float(sys.argv[4])
         accuracy = float(sys.argv[5])
+
+    d_range = range(d_from, d_to)
 
     smaller_scale = 6.3
 
