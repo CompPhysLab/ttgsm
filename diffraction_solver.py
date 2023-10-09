@@ -43,7 +43,7 @@ def calculate_r(simulation_variables):
     diag_blocks = tt.kron(kz, powers.tt)
 
     # exp(x)
-    diag_blocks = tt.multifuncrs([diag_blocks], np.exp, eps=accuracy, verb=0)
+    diag_blocks = tt.multifuncrs([diag_blocks], np.exp, eps=accuracy, verb=1)
 
     # in each block: subtract one from upper triangle and 1/2 from diagonal elements
     subtrahend = tt.Toeplitz(tt.ones(2, dl), kind='L') - 0.5 * tt.eye(2, dl)
@@ -95,8 +95,8 @@ def calculate_t(simulation_variables):
     diag_blocks_negative = tt.kron(kz, powers_negative)
 
     # exp(x)
-    diag_blocks_positive = tt.multifuncrs([diag_blocks_positive], np.exp, eps=accuracy, verb=0)
-    diag_blocks_negative = tt.multifuncrs([diag_blocks_negative], np.exp, eps=accuracy, verb=0)
+    diag_blocks_positive = tt.multifuncrs([diag_blocks_positive], np.exp, eps=accuracy, verb=1)
+    diag_blocks_negative = tt.multifuncrs([diag_blocks_negative], np.exp, eps=accuracy, verb=1)
 
     # block-diagonal matrix
     # the following code does the same as block_diagonal(),
@@ -167,8 +167,8 @@ def calculate_v(simulation_variables):
     accuracy = simulation_variables.accuracy
 
     modes = (2 ** do) * tt.ones(2, do) - tt.xfun(2, do)
-    fourier_nonzero_vector_positive = tt.multifuncrs([modes], permittivity_fourier, eps=accuracy, verb=0)
-    fourier_nonzero_vector_negative = tt.multifuncrs([-modes], permittivity_fourier, eps=accuracy, verb=0)
+    fourier_nonzero_vector_positive = tt.multifuncrs([modes], permittivity_fourier, eps=accuracy, verb=1)
+    fourier_nonzero_vector_negative = tt.multifuncrs([-modes], permittivity_fourier, eps=accuracy, verb=1)
     fourier_zero_mode = permittivity_fourier(0)
 
     v_block = tt.Toeplitz(fourier_nonzero_vector_negative, kind='U')
@@ -221,14 +221,14 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
     # memory_to_print = len(a.tt.core)
 
     external = plane_wave_in_layers(simulation_variables)
-    modes_in_layers = amen_solve(a, external, tt.ones(2, do + dl + 1), accuracy, verb=0)
+    modes_in_layers = amen_solve(a, external, tt.ones(2, do + dl + 1), accuracy, verb=1)
     modes_in_layers = modes_in_layers.round(accuracy)
 
     # propagate to substrate and superstrate
     a = t * diffraction_matrix
     a = a.round(accuracy)
     # TODO: amen_mv + initial guess (try y = Ax = [0 ... 0 1 0 ... 0 1 0 ... 0])
-    modes = amen_mv(a, modes_in_layers, accuracy, verb=False)[0]
+    modes = amen_mv(a, modes_in_layers, accuracy, verb=1)[0]
     # initial_guess_modes = tt.ones(a.n)
     # modes = amen_mv(a, modes_in_layers, accuracy, y=initial_guess_modes, verb=False)[0]
     # modes = tt.matvec(a, modes_in_layers)

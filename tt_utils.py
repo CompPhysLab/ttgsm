@@ -11,7 +11,7 @@ def map_on_modes(func, d, accuracy):
 
     def func_shifted(arg):
         return func(arg - 2 ** (d - 1))
-    y = tt.multifuncrs([x], func_shifted, eps=accuracy, y0=tt.ones(2, d), verb=0)
+    y = tt.multifuncrs([x], func_shifted, eps=accuracy, y0=tt.ones(2, d), verb=1)
 
     return y
 
