@@ -10,15 +10,15 @@ logging.basicConfig(filename='multiscale.log', filemode='w', format='%(message)s
 try:
     if __name__ == '__main__':
         print('n range:', end='\t')
-        n_range_str = list(map(int, input().split(',')))
+        n_range = list(map(int, input().split(',')))
         print('d range from:', end='\t')
-        d_from_str = int(input())
+        d_from = int(input())
         print('d range to:', end='\t')
-        d_to_str = int(input())
+        d_to = int(input())
         print('thickness:', end='\t')
-        thickness_str = float(input())
+        thickness = float(input())
         print('accuracy:', end='\t')
-        accuracy_str = float(input())
+        accuracy = float(input())
     else:
         n_range = list(map(int, sys.argv[1].split(',')))
         d_from = int(sys.argv[2])
