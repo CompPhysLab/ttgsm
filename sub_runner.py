@@ -6,7 +6,7 @@ if __name__ == '__main__':
     # script_name = input()
     script_name = 'multiscale_convergence'
 
-    print('n range:', end='\t\t')
+    print('n range:', end='\t')
     n_range_str = input()
 
     print('d range from:', end='\t')
