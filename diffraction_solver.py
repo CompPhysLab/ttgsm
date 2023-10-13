@@ -6,7 +6,7 @@ from tt_utils import tt_tile, map_on_modes, qtt_exp, block_diagonal, insert_zero
 
 
 class SimulationVariables:
-    def __init__(self, do, dl, grating, incidence, accuracy=1e-6):
+    def __init__(self, do, dl, grating, incidence, accuracy=1e-6, verb=0):
         self.do = do
         self.dl = dl
         self.accuracy = accuracy
@@ -17,7 +17,9 @@ class SimulationVariables:
         self.nl = 2 ** dl
         self.dh = grating.thickness / self.nl
 
-        self.kz_vector = map_on_modes(lambda x: k_zn(grating, incidence, x), do, accuracy)
+        self.verb = verb
+
+        self.kz_vector = map_on_modes(lambda x: k_zn(grating, incidence, x), do, accuracy, verb=verb)
 
 
 def k_xn(grating, incidence, n):
@@ -33,6 +35,7 @@ def calculate_r(simulation_variables):
     dh = simulation_variables.dh
     kz = simulation_variables.kz_vector
     accuracy = simulation_variables.accuracy
+    verb = simulation_variables.verb
 
     # exponents with layer indexes
     powers = tt.xfun(2, dl)
@@ -43,7 +46,7 @@ def calculate_r(simulation_variables):
     diag_blocks = tt.kron(kz, powers.tt)
 
     # exp(x)
-    diag_blocks = tt.multifuncrs([diag_blocks], np.exp, eps=accuracy, verb=1)
+    diag_blocks = tt.multifuncrs([diag_blocks], np.exp, eps=accuracy, verb=verb)
 
     # in each block: subtract one from upper triangle and 1/2 from diagonal elements
     subtrahend = tt.Toeplitz(tt.ones(2, dl), kind='L') - 0.5 * tt.eye(2, dl)
@@ -82,6 +85,7 @@ def calculate_t(simulation_variables):
     dh = simulation_variables.dh
     kz = simulation_variables.kz_vector
     accuracy = simulation_variables.accuracy
+    verb = simulation_variables.verb
 
     # exponents i * \Delta z_p
     powers_positive = tt.ones(2, dl) * (2 ** dl - 0.5) - tt.xfun(2, dl)
@@ -95,8 +99,8 @@ def calculate_t(simulation_variables):
     diag_blocks_negative = tt.kron(kz, powers_negative)
 
     # exp(x)
-    diag_blocks_positive = tt.multifuncrs([diag_blocks_positive], np.exp, eps=accuracy, verb=1)
-    diag_blocks_negative = tt.multifuncrs([diag_blocks_negative], np.exp, eps=accuracy, verb=1)
+    diag_blocks_positive = tt.multifuncrs([diag_blocks_positive], np.exp, eps=accuracy, verb=verb)
+    diag_blocks_negative = tt.multifuncrs([diag_blocks_negative], np.exp, eps=accuracy, verb=verb)
 
     # block-diagonal matrix
     # the following code does the same as block_diagonal(),
@@ -139,11 +143,12 @@ def calculate_t(simulation_variables):
 def calculate_p(simulation_variables):
     do, dl = simulation_variables.do, simulation_variables.dl
     accuracy = simulation_variables.accuracy
+    verb = simulation_variables.verb
 
     def p_func(n):
         return 1 / k_zn(simulation_variables.grating, simulation_variables.incidence, n)
 
-    p = map_on_modes(p_func, do, accuracy)
+    p = map_on_modes(p_func, do, accuracy, verb)
     p = tt.diag(tt_tile(p, 2, dl + 1))
     return p
 
@@ -165,10 +170,11 @@ def calculate_v(simulation_variables):
     dh = simulation_variables.dh
     background_permittivity = simulation_variables.grating.background_permittivity
     accuracy = simulation_variables.accuracy
+    verb = simulation_variables.verb
 
     modes = (2 ** do) * tt.ones(2, do) - tt.xfun(2, do)
-    fourier_nonzero_vector_positive = tt.multifuncrs([modes], permittivity_fourier, eps=accuracy, verb=1)
-    fourier_nonzero_vector_negative = tt.multifuncrs([-modes], permittivity_fourier, eps=accuracy, verb=1)
+    fourier_nonzero_vector_positive = tt.multifuncrs([modes], permittivity_fourier, eps=accuracy, verb=verb)
+    fourier_nonzero_vector_negative = tt.multifuncrs([-modes], permittivity_fourier, eps=accuracy, verb=verb)
     fourier_zero_mode = permittivity_fourier(0)
 
     v_block = tt.Toeplitz(fourier_nonzero_vector_negative, kind='U')
@@ -200,8 +206,12 @@ def plane_wave_in_layers(simulation_variables):
     return amps
 
 
-def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
-    simulation_variables = SimulationVariables(do, dl, grating, incidence, accuracy=accuracy)
+def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6, verb=0):
+    # TODO: warnings are suppressed because of ttpy TT Cross implementation, make pull request to ttpy in the future
+    # TODO: needs to be DISABLED while testing new features!!!
+    np.seterr(divide='ignore', invalid='ignore')
+
+    simulation_variables = SimulationVariables(do, dl, grating, incidence, accuracy=accuracy, verb=verb)
 
     r = calculate_r(simulation_variables)
     p = calculate_p(simulation_variables)
@@ -221,7 +231,7 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
     # memory_to_print = len(a.tt.core)
 
     external = plane_wave_in_layers(simulation_variables)
-    modes_in_layers = amen_solve(a, external, tt.ones(2, do + dl + 1), accuracy, verb=1)
+    modes_in_layers = amen_solve(a, external, tt.ones(2, do + dl + 1), accuracy, verb=verb)
     modes_in_layers = modes_in_layers.round(accuracy)
 
     # propagate to substrate and superstrate
@@ -230,12 +240,13 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6):
     # TODO: amen_mv + initial guess (try y = Ax = [0 ... 0 1 0 ... 0 1 0 ... 0])
     modes = amen_mv(a, modes_in_layers, accuracy, verb=1)[0]
     # initial_guess_modes = tt.ones(a.n)
-    # modes = amen_mv(a, modes_in_layers, accuracy, y=initial_guess_modes, verb=False)[0]
+    # modes = amen_mv(a, modes_in_layers, accuracy, y=initial_guess_modes, verb=1)[0]
     # modes = tt.matvec(a, modes_in_layers)
     # modes = modes.round(accuracy)
+    print(modes.full(asvector=True))
 
     # as matrix T was rectangular, modes have (do + dl) dimensions
-    # but n(do+1, ..., dl) = 1
+    # but n(do+1, ..., do+dl) = 1
     # multiply cores with size 1 to make d = do+1
     modes_cores = tt.vector.to_list(modes)
     modes_cores_shortened = modes_cores[:do]

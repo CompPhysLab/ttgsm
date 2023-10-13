@@ -1,6 +1,6 @@
 import numpy as np
 import random
-import logging
+# import logging
 
 
 class Grating:
@@ -48,7 +48,7 @@ class Grating:
                                    background_permittivity=1,
                                    seed=None):
 
-        logging.basicConfig(filename='multiscale_structure.log', format='%(message)s')
+        # logging.basicConfig(filename='multiscale_structure.log', format='%(message)s')
 
         if seed is not None:
             random.seed(seed)
@@ -58,7 +58,7 @@ class Grating:
         for i in range(n):
             center_point = width_per_slab * (i - n / 2 + 0.5)
             width = width_per_slab * random.uniform(min_width, max_width)
-            logging.warning(f'{center_point}, {width}')
+            # logging.warning(f'{center_point}, {width}')
             slab_functions.append(
                 Grating.lamellar_permittivity_fourier(
                     relative_filling=width,

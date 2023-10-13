@@ -6,8 +6,8 @@ from grating import Grating
 
 
 if __name__ == '__main__':
-    do = 12
-    dl = 12
+    do = 8
+    dl = 8
 
     incidence = Incidence(angle=10)
     grating = Grating.lamellar(period=1.0, thickness=0.4, relative_filling=0.3, max_permittivity=2.1)

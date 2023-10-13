@@ -2,7 +2,7 @@ import tt
 import numpy as np
 
 
-def map_on_modes(func, d, accuracy):
+def map_on_modes(func, d, accuracy, verb=0):
     """
     Maps a function func on vector of mode indexes using TT-Cross.
     Returns func([-N, ..., N-1]) in TT-format, where N = 2 ** (d - 1)
@@ -11,7 +11,7 @@ def map_on_modes(func, d, accuracy):
 
     def func_shifted(arg):
         return func(arg - 2 ** (d - 1))
-    y = tt.multifuncrs([x], func_shifted, eps=accuracy, y0=tt.ones(2, d), verb=1)
+    y = tt.multifuncrs([x], func_shifted, eps=accuracy, y0=tt.ones(2, d), verb=verb)
 
     return y
 
