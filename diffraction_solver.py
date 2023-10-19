@@ -238,12 +238,22 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6, verb=0):
     a = t * diffraction_matrix
     a = a.round(accuracy)
     # TODO: amen_mv + initial guess (try y = Ax = [0 ... 0 1 0 ... 0 1 0 ... 0])
-    modes = amen_mv(a, modes_in_layers, accuracy, verb=1)[0]
+    # np.set_printoptions(threshold=np.inf)
+    # np.set_printoptions(linewidth=np.inf)
+    # print(modes_in_layers.full(asvector=True))
+    # print(a.full())
+
+    # modes = amen_mv(a.real(), modes_in_layers.real(), accuracy, verb=1)[0]
+
+    # print(modes.full(asvector=True))
+    # print(modes)
+    # print(np.linalg.norm(modes.real().full(asvector=True) - np.dot(a.real().full(), modes_in_layers.real().full(asvector=True))))
+
     # initial_guess_modes = tt.ones(a.n)
     # modes = amen_mv(a, modes_in_layers, accuracy, y=initial_guess_modes, verb=1)[0]
-    # modes = tt.matvec(a, modes_in_layers)
-    # modes = modes.round(accuracy)
-    print(modes.full(asvector=True))
+
+    modes = tt.matvec(a, modes_in_layers)
+    modes = modes.round(accuracy)
 
     # as matrix T was rectangular, modes have (do + dl) dimensions
     # but n(do+1, ..., do+dl) = 1
