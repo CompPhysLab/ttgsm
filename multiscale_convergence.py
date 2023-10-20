@@ -9,6 +9,7 @@ logging.basicConfig(filename='multiscale.log', filemode='w', format='%(message)s
 
 try:
     if __name__ == '__main__':
+        print(len(sys.argv))
         print('n range:', end='\t')
         n_range = list(map(int, input().split(',')))
         print('d range from:', end='\t')
