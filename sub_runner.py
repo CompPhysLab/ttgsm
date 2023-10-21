@@ -20,4 +20,7 @@ if __name__ == '__main__':
     print('accuracy:', end='\t')
     accuracy_str = input()
 
-    subprocess.Popen(['python3', f'{script_name}.py', n_range_str, d_from_str, d_to_str, thickness_str, accuracy_str])
+    print('num sweeps:', end='\t')
+    nswp_str = input()
+
+    subprocess.Popen(['python3', f'{script_name}.py', n_range_str, d_from_str, d_to_str, thickness_str, accuracy_str, nswp_str])

@@ -206,7 +206,7 @@ def plane_wave_in_layers(simulation_variables):
     return amps
 
 
-def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6, verb=0):
+def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6, verb=0, nswp=20):
     # TODO: warnings are suppressed because of ttpy TT Cross implementation, make pull request to ttpy in the future
     # TODO: needs to be DISABLED while testing new features!!!
     np.seterr(divide='ignore', invalid='ignore')
@@ -243,7 +243,7 @@ def solve_diffraction(do, dl, grating, incidence, accuracy=1e-6, verb=0):
     # print(modes_in_layers.full(asvector=True))
     # print(a.full())
 
-    modes = amen_mv(a.real(), modes_in_layers.real(), accuracy, verb=0, nswp=100)[0]
+    modes = amen_mv(a.real(), modes_in_layers.real(), accuracy, verb=verb, nswp=nswp)[0]
 
     # print(modes.full(asvector=True))
     # print(modes)
