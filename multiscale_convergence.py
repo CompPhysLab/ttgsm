@@ -39,7 +39,7 @@ try:
             incidence = Incidence(angle=10)
             grating = Grating.multiscale_lamellar_random(period=n * smaller_scale, n=n,
                                                          thickness=thickness, max_permittivity=2.1, seed=1)
-            x = solve_diffraction(do=d, dl=d / 2, grating, incidence, accuracy=accuracy, nswp=nswp)
+            x = solve_diffraction(do=d, dl=d / 2, grating=grating, incidence=incidence, accuracy=accuracy, nswp=nswp)
             amp = abs(x.full(asvector=True)[2 ** (d - 1)])
             # print(n, d, amp)
             logging.warning(f'{n} {d} {amp}')
