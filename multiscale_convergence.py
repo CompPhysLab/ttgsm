@@ -41,7 +41,7 @@ try:
                                                          thickness=thickness, max_permittivity=2.1, seed=1)
             x = solve_diffraction(
                 do=d,
-                dl=max(d - 1, 2),
+                dl=d + 1,
                 grating=grating,
                 incidence=incidence,
                 accuracy=accuracy,
