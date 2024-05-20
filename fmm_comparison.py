@@ -8,7 +8,6 @@ from fmm_reference import fmm_data
 
 
 if __name__ == '__main__':
-
     for fmm_test in fmm_data[:1]:
         incidence = Incidence(fmm_test['angle'])
         grating = Grating.lamellar(period=fmm_test['period'],

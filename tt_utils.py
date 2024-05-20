@@ -11,7 +11,11 @@ def map_on_modes(func, d, accuracy, verb=0, nswp=20):
 
     def func_shifted(arg):
         return func(arg - 2 ** (d - 1))
-    y = tt.multifuncrs([x], func_shifted, eps=accuracy, y0=tt.ones(2, d), verb=verb, nswp=nswp)
+    # y = tt.multifuncrs([x], func_shifted, eps=accuracy, y0=tt.ones(2, d), verb=verb, nswp=nswp)
+
+    y = func_shifted(x.full())
+    # y[np.where(np.abs(y) > 1000)] = 1000 * y[np.where(np.abs(y) > 1000)] / abs(y[np.where(np.abs(y) > 1000)])
+    y = tt.vector(y)
 
     return y
 
@@ -118,3 +122,19 @@ def insert_zeros(x, d, non_zero_position=0):
         non_zero_position = non_zero_position // 2
     cores += tt.vector.to_list(x)
     return tt.vector.from_list(cores)
+
+
+# def series_exponent(x, max_power=5, accuracy=1e-6):
+#     y_series = tt.ones(x.n) + x
+#     factorial = 1
+#     x_power = x
+#     term_accuracy = accuracy / max_power
+#
+#     for i in range(2, max_power + 1):
+#         factorial *= i
+#         x_power = x_power * x
+#         x_power = x_power.round(eps=term_accuracy)
+#         y_series = y_series + (1 / factorial) * x_power
+#
+#     y_series = y_series.round(accuracy)
+#     return y_series

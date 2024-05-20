@@ -41,7 +41,7 @@ try:
                                                          thickness=thickness, max_permittivity=2.1, seed=1)
             x = solve_diffraction(
                 do=d,
-                dl=max(d - 1, 2),
+                dl=6,
                 grating=grating,
                 incidence=incidence,
                 accuracy=accuracy,
@@ -50,6 +50,6 @@ try:
 
             amp = abs(x.full(asvector=True)[2 ** (d - 1)])
             # print(n, d, amp)
-            logging.warning(f'{n} {d} {amp}')
+            logging.warning(f'{n} {d} {1 - amp}')
 except Exception as e:
     logging.warning(e)
