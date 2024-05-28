@@ -2,25 +2,30 @@ import subprocess
 
 
 if __name__ == '__main__':
-    # print('Enter script name to run:')
-    # script_name = input()
-    script_name = 'multiscale_convergence'
+    print('Enter script name to run:')
+    script_name = input()
 
-    print('n range:', end='\t')
-    n_range_str = input()
+    if script_name == 'mul':
+        script_name = 'multiscale_convergence'
+    if script_name == 'acc':
+        script_name = 'test_accuracy_control'
 
-    print('d range from:', end='\t')
-    d_from_str = input()
-    print('d range to:', end='\t')
-    d_to_str = input()
+    if script_name == 'multiscale_convergence':
+        print('n range:', end='\t')
+        n_range_str = input()
+        print('d range from:', end='\t')
+        d_from_str = input()
+        print('d range to:', end='\t')
+        d_to_str = input()
+        print('thickness:', end='\t')
+        thickness_str = input()
+        print('accuracy:', end='\t')
+        accuracy_str = input()
+        print('num sweeps:', end='\t')
+        nswp_str = input()
 
-    print('thickness:', end='\t')
-    thickness_str = input()
-
-    print('accuracy:', end='\t')
-    accuracy_str = input()
-
-    print('num sweeps:', end='\t')
-    nswp_str = input()
-
-    subprocess.Popen(['python3', f'{script_name}.py', n_range_str, d_from_str, d_to_str, thickness_str, accuracy_str, nswp_str])
+        subprocess.Popen(
+            ['python3', f'{script_name}.py', n_range_str, d_from_str, d_to_str, thickness_str, accuracy_str, nswp_str]
+        )
+    else:
+        subprocess.Popen(['python3', f'{script_name}.py'])
