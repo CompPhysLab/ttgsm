@@ -11,7 +11,7 @@ gsm_a0 = 0.844796923956883
 incidence = Incidence(angle=30)
 grating = Grating.lamellar(period=6, thickness=6, relative_filling=0.75, max_permittivity=2.1)
 
-with open('accuracy_control.log', 'a') as f:
+with open('accuracy_control.log', 'w') as f:
     f.write('-' * 10)
     f.write('Starting new simulation\n')
     f.write(f'{datetime.datetime.now()}\n')
