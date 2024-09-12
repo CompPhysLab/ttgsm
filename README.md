@@ -1,0 +1,30 @@
+# TTGSM
+
+## Overview
+This repository contains a Logarithmically complex rigorous Fourier-space solution to the 1D grating diffraction problem. The method implemented in this code is the **Tensor-Train Accelerated Generalised Source Method (TTGSM)**.
+
+Developed by **Evgenii Levdik** and **Alexey A. Shcherbakov**.
+
+For more details, refer to the following article: *[link to arXiv should be here]*.
+
+## Installation
+This code requires `ttpy`, a Python implementation of the Tensor Train Toolbox. To install the required dependencies, run:
+
+```bash
+pip install numpy==1.23.5
+pip install scipy
+pip install git+https://github.com/oseledets/ttpy.git
+```
+
+Note that this repository cannot be installed as a library. Simply clone the repository:
+```
+git clone https://github.com/levdik/ttgsm.git
+```
+
+## Usage
+An example of usage is provided in `main.py`.
+
+## License
+This project is **unlicensed** and placed in the public domain. You are free to use, modify, distribute, and incorporate this code into your own projects without any restrictions.
+
+If you find this code useful in your work, a citation would be appreciated.
