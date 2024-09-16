@@ -5,10 +5,10 @@ This repository contains a Logarithmically complex rigorous Fourier-space soluti
 
 Developed by **Evgenii Levdik** and **Alexey A. Shcherbakov**.
 
-For more details, refer to the following article: *[link to arXiv should be here]*.
+For more details, refer to the following article: [link](https://arxiv.org/abs/2409.07821).
 
 ## Installation
-This code requires `ttpy`, a Python implementation of the Tensor Train Toolbox. To install the required dependencies, run:
+This code requires [`ttpy`](https://github.com/oseledets/ttpy), a Python implementation of the Tensor Train Toolbox. `ttpy` doesn't support installation on Windows, so it's recommended to use a Linux-based OS. To install the required dependencies, run the following in a new environment:
 
 ```bash
 pip install numpy==1.23.5
@@ -17,7 +17,7 @@ pip install git+https://github.com/oseledets/ttpy.git
 ```
 
 Note that this repository cannot be installed as a library. Simply clone the repository:
-```
+```bash
 git clone https://github.com/levdik/ttgsm.git
 ```
 
