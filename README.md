@@ -8,11 +8,11 @@ Developed by **Evgenii Levdik** and **Alexey A. Shcherbakov**.
 For more details, refer to the following article: [link](https://arxiv.org/abs/2409.07821).
 
 ## Installation
-This code requires [`ttpy`](https://github.com/oseledets/ttpy), a Python implementation of the Tensor Train Toolbox. `ttpy` doesn't support installation on Windows, so it's recommended to use a Linux-based OS. To install the required dependencies, run the following in a new environment:
+This code requires [`ttpy`](https://github.com/oseledets/ttpy), a Python implementation of the Tensor Train Toolbox. `ttpy` doesn't support installation on Windows, so it's recommended to use a Linux-based OS. To install the required dependencies, run the following in a new conda environment:
 
 ```bash
-pip install numpy==1.23.5
-pip install scipy
+conda install numpy==1.23.5
+conda install scipy
 pip install git+https://github.com/oseledets/ttpy.git
 ```
 
