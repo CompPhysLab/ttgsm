@@ -1,7 +1,9 @@
 # TTGSM
 
 ## Overview
-This repository contains a Logarithmically complex rigorous Fourier-space solution to the 1D grating diffraction problem. The method implemented in this code is the **Tensor-Train Accelerated Generalised Source Method (TTGSM)**.
+This repository contains a code supporting the paper "Logarithmically complex rigorous Fourier-space solution to the 1D grating diffraction problem" [1]. The method implemented in this code is the **Tensor-Train Accelerated Generalised Source Method (TTGSM)**.
+
+[1] E. Levdik and A. A. Shcherbakov, "Logarithmically complex rigorous Fourier space solution to the 1D grating diffraction problem," Computer Physics Communications 310, 109530 (2025).
 
 Developed by **Evgenii Levdik** and **Alexey A. Shcherbakov**.
 
